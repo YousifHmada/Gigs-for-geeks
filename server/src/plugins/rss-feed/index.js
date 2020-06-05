@@ -20,9 +20,14 @@ function init(context) {
   const intervalObj = setInterval(async () => {
     const lastIsoDate = await context.plugins.postgres.getLastIsoDate();
     const jobs = await readRSSFeed(context.config.RSS_URL, lastIsoDate);
-    jobs.forEach(context.useCases.addJob);
-    // eslint-disable-next-line no-console
-    console.log(`[RSS FEED] ${jobs.length} jobs added!`);
+    try {
+      await Promise.all(jobs.map(context.useCases.addJob));
+      // eslint-disable-next-line no-console
+      console.log(`[RSS FEED] ${jobs.length} jobs added!`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('[RSS FEED] error in saving jobs!');
+    }
   }, interval);
   function close() {
     clearInterval(intervalObj);

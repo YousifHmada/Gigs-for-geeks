@@ -2,7 +2,6 @@
 /* eslint-disable no-use-before-define */
 const knex = require('knex');
 
-
 async function init(context) {
   const pg = knex({
     client: 'pg',
@@ -12,12 +11,12 @@ async function init(context) {
 
   try {
     await createTables();
-  // eslint-disable-next-line no-empty
+    // eslint-disable-next-line no-empty
   } catch {}
 
   function createTables() {
     return pg.schema
-      .createTable('job', (table) => {
+      .createTable('jobs', (table) => {
         table.increments('id');
         table.string('title');
         table.string('link');
@@ -35,34 +34,28 @@ async function init(context) {
     pg.disconnect();
   }
 
-  const jobs = [];
-  let lastId = 0;
-
   function findJobs(page, countPerPage) {
-    const start = (page - 1) * countPerPage;
-    const end = start + countPerPage;
-    return jobs.slice(start, end).map((job) => ({ ...job, isoDate: new Date(job.isoDate) }));
+    const offset = (page - 1) * countPerPage;
+    return pg('jobs').orderBy('id', 'desc').offset(offset).limit(countPerPage)
+      .then((jobs) => jobs.map((job) => ({ ...job, isoDate: new Date(job.isoDate) })));
   }
 
   // eslint-disable-next-line consistent-return
   function deleteJob(id) {
-    const index = jobs.findIndex((job) => job.id === id);
-    // eslint-disable-next-line no-bitwise
-    if (~index) {
-      return jobs.splice(index, 1);
-    }
+    return pg('jobs').where({ id }).delete();
   }
 
   function countJobs() {
-    return jobs.length;
+    return pg('jobs').count().then(([{ count }]) => +count);
   }
 
   function addJob(body) {
-    jobs.push({ ...body, id: lastId++ });
+    return pg('jobs').insert(body);
   }
 
   function getLastIsoDate() {
-    return jobs.length > 0 ? new Date(jobs[jobs.length - 1].isoDate) : null;
+    return pg('jobs').select('isoDate').orderBy('id', 'desc').limit(1)
+      .then((([{ isoDate } = {}]) => (isoDate ? new Date(isoDate) : null)));
   }
 
   return {
