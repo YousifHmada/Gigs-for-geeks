@@ -1,10 +1,15 @@
 const express = require('express');
-const initJobsRoutes = require('./jobs');
+
+const {
+  findJobs,
+  deleteJob,
+} = require('../controllers/jobs');
 
 function init() {
   const router = express.Router();
 
-  router.use('/jobs', initJobsRoutes());
+  router.get('/', findJobs);
+  router.delete('/:id', deleteJob);
 
   return router;
 }
