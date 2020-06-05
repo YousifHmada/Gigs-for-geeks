@@ -1,3 +1,4 @@
 {
-    "RSS_INTERVAL" : 30
+    "RSS_INTERVAL" : 5,
+    "JOBS_PER_PAGE": 10
 }

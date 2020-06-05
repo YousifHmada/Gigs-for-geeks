@@ -8,10 +8,11 @@ const ErrorHandler = require('./ErrorHandler');
 function init(context) {
   const app = express();
   const port = context.env.PORT || 3000;
+  const host = context.env.host || 'http://localhost';
 
   app.use(bodyParser.json());
   app.use(cors());
-  app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+  app.use(morgan('[EXPRESS] :method :url :status :res[content-length] - :response-time ms'));
 
   app.use((req, res, next) => {
     req.context = context;
@@ -23,7 +24,7 @@ function init(context) {
   app.use(new ErrorHandler(context));
 
   // eslint-disable-next-line no-console
-  const server = app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+  const server = app.listen(port, () => console.log(`[EXPRESS] server listening at ${host}:${port}`));
 
   function close() {
     server.close();

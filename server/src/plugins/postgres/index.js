@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-use-before-define */
 const knex = require('knex');
 
@@ -23,7 +24,7 @@ async function init(context) {
       })
       .then(() => {
         // eslint-disable-next-line no-console
-        console.log('users table created!');
+        console.log('[POSTGRES] users table created!');
       });
   }
 
@@ -32,8 +33,38 @@ async function init(context) {
     pg.disconnect();
   }
 
+  const jobs = [];
+  let lastId = 0;
+
+  function findJobs(page, countPerPage) {
+    const start = (page - 1) * countPerPage;
+    const end = start + countPerPage;
+    return jobs.slice(start, end);
+  }
+
+  // eslint-disable-next-line consistent-return
+  function deleteJob(id) {
+    const index = jobs.findIndex((job) => job.id === id);
+    // eslint-disable-next-line no-bitwise
+    if (~index) {
+      return jobs.splice(index, 1);
+    }
+  }
+
+  function countJobs() {
+    return jobs.length;
+  }
+
+  function addJob(body) {
+    jobs.push({ ...body, id: lastId++ });
+  }
+
   return {
     close,
+    findJobs,
+    deleteJob,
+    countJobs,
+    addJob,
   };
 }
 
