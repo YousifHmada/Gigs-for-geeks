@@ -2,15 +2,21 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "./sr/server.js",
   "dependencies": {
     "express": "^4.17.1",
     "knex": "^0.21.1",
     "pg": "^8.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint:fix": "eslint src/**/*{.js,.json} --fix",
+    "lint": "eslint src/**/*{.js,.json}"
   },
   "author": "",
   "license": "ISC"

@@ -1,0 +1,22 @@
+{
+  "name": "ggis-for-geeks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "sudo docker-compose up",
+    "stop": "sudo docker-compose down",
+    "lint": "cd app && npm run lint && cd ../server && npm run lint",
+    "lint:fix": "cd app && npm run lint:fix && cd ../server && npm run lint:fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^4.2.5"
+  }
+}
