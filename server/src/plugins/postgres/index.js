@@ -17,14 +17,16 @@ async function init(context) {
 
   function createTables() {
     return pg.schema
-      .createTable('user', (table) => {
+      .createTable('job', (table) => {
         table.increments('id');
-        table.string('name');
-        table.integer('age');
+        table.string('title');
+        table.string('link');
+        table.text('content');
+        table.date('isoDate');
       })
       .then(() => {
         // eslint-disable-next-line no-console
-        console.log('[POSTGRES] users table created!');
+        console.log('[POSTGRES] jobs table created!');
       });
   }
 
@@ -39,7 +41,7 @@ async function init(context) {
   function findJobs(page, countPerPage) {
     const start = (page - 1) * countPerPage;
     const end = start + countPerPage;
-    return jobs.slice(start, end);
+    return jobs.slice(start, end).map((job) => ({ ...job, isoDate: new Date(job.isoDate) }));
   }
 
   // eslint-disable-next-line consistent-return
@@ -59,12 +61,17 @@ async function init(context) {
     jobs.push({ ...body, id: lastId++ });
   }
 
+  function getLastIsoDate() {
+    return jobs.length > 0 ? new Date(jobs[jobs.length - 1].isoDate) : null;
+  }
+
   return {
     close,
     findJobs,
     deleteJob,
     countJobs,
     addJob,
+    getLastIsoDate,
   };
 }
 

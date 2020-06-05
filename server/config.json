@@ -1,4 +1,5 @@
 {
-    "RSS_INTERVAL" : 5,
-    "JOBS_PER_PAGE": 10
+    "RSS_INTERVAL" : 10,
+    "JOBS_PER_PAGE": 10,
+    "RSS_URL": "https://www.upwork.com/ab/feed/jobs/rss?q=node.js&sort=recency&paging=0%3B10&api_params=1&securityToken=9c1e7410a32c101ecde218f9772a5c83cce9eb3bfbbd01fb4d86bbe47fc49a14772253f589d882f0f81bc896ce0c63ceaed40dcbfaebf5775fe729c951b8c8e1&userUid=1086180370436251648&orgUid=1143082140930056193"
 }

@@ -1,24 +1,25 @@
-/* eslint-disable no-plusplus */
-let lastId = 0;
+const Parser = require('rss-parser');
 
-function readRSSFeed() {
-  return [
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-    { title: `Sample job ${lastId++}` },
-  ];
+const parser = new Parser();
+
+async function readRSSFeed(url, lastIsoDate) {
+  const feed = await parser.parseURL(url);
+
+  const jobs = feed.items.map((job) => ({
+    title: job.title,
+    link: job.link,
+    content: job.content,
+    isoDate: new Date(job.isoDate),
+  }));
+
+  return lastIsoDate ? jobs.filter(({ isoDate }) => isoDate > lastIsoDate) : jobs;
 }
 
 function init(context) {
   const interval = context.config.RSS_INTERVAL * 1000;
   const intervalObj = setInterval(async () => {
-    const jobs = await readRSSFeed();
+    const lastIsoDate = await context.plugins.postgres.getLastIsoDate();
+    const jobs = await readRSSFeed(context.config.RSS_URL, lastIsoDate);
     jobs.forEach(context.useCases.addJob);
     // eslint-disable-next-line no-console
     console.log(`[RSS FEED] ${jobs.length} jobs added!`);

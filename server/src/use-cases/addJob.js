@@ -1,10 +1,11 @@
 function init(context) {
   return function addJob(body) {
-    const { title } = body;
-    if (typeof title !== 'string') {
-      throw new Error('invalid title');
-    }
-    return context.plugins.postgres.addJob({ title });
+    const {
+      title, link, content, isoDate,
+    } = body;
+    return context.plugins.postgres.addJob({
+      title, link, content, isoDate,
+    });
   };
 }
 
