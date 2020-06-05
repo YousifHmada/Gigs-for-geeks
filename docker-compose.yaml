@@ -1,0 +1,31 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/nginx.dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./app/build:/usr/src/public
+  express:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/express.dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      port: 3000
+      PG_CONNECTION_STRING: postgres://postgres:postgres@postgres/ggis_for_geeks
+    volumes:
+      - ./server:/usr/src/server
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data:/data
+      - ./bin/init.sql:/docker-entrypoint-initdb.d/init.sql
