@@ -1,5 +1,10 @@
 async function ensureAuth(req) {
-  const [token] = req.headers.authorization.split('BearerToken ');
+  let token = '';
+  try {
+    [, token] = req.headers.authorization.split('BearerToken ');
+  } catch {
+    throw new req.context.entities.CustomError(401, 'invalid token');
+  }
   return req.context.useCases.verifyToken(token);
 }
 
