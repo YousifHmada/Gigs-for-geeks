@@ -16,7 +16,7 @@ async function readRSSFeed(url, lastIsoDate) {
 }
 
 function init(context) {
-  const interval = context.config.RSS_INTERVAL * 1000;
+  const interval = context.config.RSS_INTERVAL * 60 * 1000;
   const intervalObj = setInterval(async () => {
     const lastIsoDate = await context.plugins.postgres.getLastIsoDate();
     const jobs = await readRSSFeed(context.config.RSS_URL, lastIsoDate);

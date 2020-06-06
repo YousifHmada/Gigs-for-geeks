@@ -1,5 +1,5 @@
 {
-    "RSS_INTERVAL" : 20,
+    "RSS_INTERVAL" : 1,
     "JOBS_PER_PAGE": 10,
     "RSS_URL": "https://www.upwork.com/ab/feed/topics/rss?securityToken=9c1e7410a32c101ecde218f9772a5c83cce9eb3bfbbd01fb4d86bbe47fc49a14772253f589d882f0f81bc896ce0c63ceaed40dcbfaebf5775fe729c951b8c8e1&userUid=1086180370436251648&orgUid=1143082140930056193",
     "JWT_SECRET": "shhhhh"
