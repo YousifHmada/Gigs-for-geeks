@@ -30,3 +30,12 @@ h3 {
 #no-found-img {
     margin: 10vh;
 }
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.block {
+    width: 100%;
+}

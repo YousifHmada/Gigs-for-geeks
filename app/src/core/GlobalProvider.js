@@ -6,7 +6,9 @@ const initialState = {
 	jobs: [],
 	total: 0,
 	page: 1,
+	resultsPerPage: 10,
 	flashMessage: null,
+	filters: {},
 };
 
 export const GlobalContext = createContext(initialState);

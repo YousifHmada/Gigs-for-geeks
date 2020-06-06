@@ -1,16 +1,17 @@
 import Job from "../entities/Job";
 
 export default function reducer(state, action) {
+
 	switch (action.type) {
 		case "JOBS_RECIEVED":
 			function onJobReceived() {
-				const { total, results, page } = action.payload;
-				debugger;
+				const { total, results, page, resultsPerPage } = action.payload;
 				return {
 					...state,
 					jobs: results.map((body) => new Job(body)),
 					total,
 					page,
+					resultsPerPage,
 				};
 			}
 			return onJobReceived();
@@ -30,6 +31,31 @@ export default function reducer(state, action) {
 				};
 			}
 			return onJobDeleted();
+		case "FILTER_ADDED":
+			function onFilterApplied() {
+				const { field, value } = action.payload;
+				let { filters } = state;
+				filters[field] = value;
+				if (!value) {
+					delete filters[field];
+				} 
+				return {
+					...state,
+					filters
+				};
+			}
+			return onFilterApplied();
+		case "FILTER_REMOVED":
+			function onFilterRemoved() {
+				const field = action.payload;
+				let { filters } = state;
+				delete filters[field];
+				return {
+					...state,
+					filters
+				};
+			}
+			return onFilterRemoved();
 		case "SHOW_FLASH_MESSAGE":
 			return {
 				...state,

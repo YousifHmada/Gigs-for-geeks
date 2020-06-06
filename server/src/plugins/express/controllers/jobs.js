@@ -18,12 +18,14 @@ async function findJobs(req, res, next) {
     }
     const results = await req.context.useCases.findJobs(page);
     const total = await req.context.useCases.countJobs();
+    const resultsPerPage = req.context.config.JOBS_PER_PAGE;
     const host = req.context.env.host || 'http://localhost';
     const port = req.context.env.port || 3000;
     const cursor = `${host}${req.context.env.NODE_ENV === 'development' ? `:${port}` : ''}/api/jobs?page=${page + 1}`;
     res.send({
       page,
       total,
+      resultsPerPage,
       results,
       cursor,
     });
