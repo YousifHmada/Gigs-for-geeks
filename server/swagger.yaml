@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: This is a simple API To CRUD Jobs fetched from upwork RSS
+  description: This is a simple API To CRUS Jobs fetched from upwork RSS
   version: 1.0.0
   title: Gigs For Geeks API
 
@@ -24,6 +24,11 @@ paths:
         required: false
         default: 1
         type: integer
+      - name: authorization
+        in: header
+        description: An authorization header holding bearerToken
+        required: true
+        type: string
       responses:
         200:
           description: upwork jobs fetched by the system
@@ -53,6 +58,17 @@ paths:
               example: false
              message:
               type: string
+        401:
+          description: unauthorized
+          schema:
+            type: object
+            properties:
+             success:
+              type: integer
+              example: false
+             message:
+              type: string
+              example: token expired
   /jobs/{id}:
     delete:
       summary: Delete a job given it's id
@@ -64,6 +80,11 @@ paths:
         type: number
         name: id
         description: Job to be deleted
+      - name: authorization
+        in: header
+        description: An authorization header holding bearerToken
+        required: true
+        type: string
       responses:
         204:
           description: job deleted
@@ -77,6 +98,17 @@ paths:
               example: false
              message:
               type: string
+        401:
+          description: unauthorized
+          schema:
+            type: object
+            properties:
+             success:
+              type: integer
+              example: false
+             message:
+              type: string
+              example: token expired
 definitions:
   JobItem:
     type: object

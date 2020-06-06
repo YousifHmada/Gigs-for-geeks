@@ -19,6 +19,12 @@ function init(context) {
     next();
   });
 
+  app.use(async (req, res, next) => {
+    // Hard coded Token
+    req.headers.authorization = await context.useCases.signToken();
+    next();
+  });
+
   app.use('/api', initRoutes());
 
   app.use(new ErrorHandler(context));

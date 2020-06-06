@@ -1,5 +1,11 @@
+async function ensureAuth(req) {
+  const [token] = req.headers.authorization.split('BearerToken ');
+  return req.context.useCases.verifyToken(token);
+}
+
 async function findJobs(req, res, next) {
   try {
+    await ensureAuth(req);
     const page = req.query.page ? +req.query.page : 1;
     // eslint-disable-next-line no-restricted-globals
     if (typeof page !== 'number' || isNaN(page)) {
@@ -23,6 +29,7 @@ async function findJobs(req, res, next) {
 
 async function deleteJob(req, res, next) {
   try {
+    await ensureAuth(req);
     const id = req.params.id ? +req.params.id : undefined;
     // eslint-disable-next-line no-restricted-globals
     if (typeof id !== 'number' || isNaN(id)) {
