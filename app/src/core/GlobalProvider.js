@@ -26,9 +26,10 @@ export default function GlovalProvider({ children }) {
 				.then((data) => {
 					if (!canceled) {
 						if (data.total === 0) {
-							throw new Error();
+							timeOutObj = setTimeout(getJobs, tryAfter);
+						} else {
+							dispatch({ type: "JOBS_RECIEVED", payload: data });
 						}
-						dispatch({ type: "JOBS_RECIEVED", payload: data });
 					}
 				})
 				.catch((error) => {
