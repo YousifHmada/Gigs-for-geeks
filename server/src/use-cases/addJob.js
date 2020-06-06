@@ -1,11 +1,6 @@
 function init(context) {
   return function addJob(body) {
-    const {
-      title, link, content, isoDate,
-    } = body;
-    return context.plugins.postgres.addJob({
-      title, link, content, isoDate,
-    });
+    return context.plugins.postgres.addJob(body);
   };
 }
 

@@ -36,8 +36,19 @@ async function init(context) {
 
   function findJobs(page, countPerPage) {
     const offset = (page - 1) * countPerPage;
-    return pg('jobs').orderBy('id', 'desc').offset(offset).limit(countPerPage)
-      .then((jobs) => jobs.map((job) => ({ ...job, isoDate: new Date(job.isoDate) })));
+    return pg('jobs')
+      .orderBy('id', 'desc')
+      .offset(offset)
+      .limit(countPerPage)
+      .then((rows) => rows.map(({
+        id, title, link, content, isoDate,
+      }) => ({
+        id,
+        title,
+        link,
+        content,
+        isoDate,
+      })));
   }
 
   // eslint-disable-next-line consistent-return
@@ -46,7 +57,9 @@ async function init(context) {
   }
 
   function countJobs() {
-    return pg('jobs').count().then(([{ count }]) => +count);
+    return pg('jobs')
+      .count()
+      .then(([{ count }]) => +count);
   }
 
   function addJob(body) {
@@ -54,8 +67,11 @@ async function init(context) {
   }
 
   function getLastIsoDate() {
-    return pg('jobs').select('isoDate').orderBy('id', 'desc').limit(1)
-      .then((([{ isoDate } = {}]) => (isoDate ? new Date(isoDate) : null)));
+    return pg('jobs')
+      .select('isoDate')
+      .orderBy('id', 'desc')
+      .limit(1)
+      .then(([{ isoDate } = {}]) => (isoDate ? new Date(isoDate) : null));
   }
 
   return {

@@ -21,7 +21,7 @@ function init(context) {
 
   app.use(async (req, res, next) => {
     // Hard coded Token
-    req.headers.authorization = await context.useCases.signToken();
+    req.headers.authorization = `BearerToken ${await context.useCases.signToken()}`;
     next();
   });
 
